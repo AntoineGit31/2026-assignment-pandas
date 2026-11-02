@@ -52,7 +52,12 @@ def merge_referendum_and_areas(referendum, regions_and_departments):
     referendum = referendum.copy()
     referendum["Department code"] = (referendum["Department code"].str.zfill(2))
     referendum = referendum[~referendum["Department code"].str.contains("Z")]
-    merged = pd.merge(referendum,regions_and_departments,left_on="Department code",right_on="code_dep")
+    merged = pd.merge(
+        referendum,
+        regions_and_departments,
+        left_on="Department code",
+        right_on="code_dep"
+    )
     return merged
 
 
@@ -75,8 +80,12 @@ def compute_referendum_result_by_regions(referendum_and_areas):
         for i in range (len(referendum_and_areas)):
                 if referendum_and_areas["code_reg"].iloc[i] == j:
                     final.loc[j, "name_reg"] = referendum_and_areas["name_reg"].iloc[i]
-                    final.loc[j, "Registered"] += referendum_and_areas["Registered"].iloc[i]
-                    final.loc[j, "Abstentions"] += referendum_and_areas["Abstentions"].iloc[i]
+                    final.loc[j, "Registered"] += (
+                        referendum_and_areas["Registered"].iloc[i]
+                    )
+                    final.loc[j, "Abstentions"] += (
+                        referendum_and_areas["Abstentions"].iloc[i]
+                    )
                     final.loc[j, "Null"] += referendum_and_areas["Null"].iloc[i]
                     final.loc[j, "Choice A"] += referendum_and_areas["Choice A"].iloc[i]
                     final.loc[j, "Choice B"] += referendum_and_areas["Choice B"].iloc[i]
